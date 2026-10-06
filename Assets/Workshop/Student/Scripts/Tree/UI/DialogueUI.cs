@@ -20,6 +20,9 @@ public class DialogueUI : MonoBehaviour
     public void Setup(DialogueSequen sequen)
     {
         //1. Set Dialogue Sequen
+        InteractNpcSequen = sequen;
+        DialogueNode currrentNode = InteractNpcSequen.tree.root;
+        ShowDialogue(currrentNode);
 
         //Show UI
         gameObject.SetActive(true);
@@ -29,13 +32,22 @@ public class DialogueUI : MonoBehaviour
     public void ShowDialogue(DialogueNode node)
     {
         // 2. set ให้เป็น โหนดปัจจุบัน
+        InteractNpcSequen.currentNode = node;
 
         // 3. แสดงข้อความของ NPC
+        npcText.text = node.text;
 
         // 4. ล้างปุ่มตัวเลือกเก่า
+        ClearChoices();
 
         // 5. สร้างปุ่มตัวเลือกใหม่ตาม nexts
-   
+        var choices = new List<string>(node.nexts.Keys);
+        for (int i = 0; i < choices.Count; i++)
+        {
+            string choiceText = choices[i];
+            CreateChoiceButton(choiceText, i);
+        }
+
     }
 
     private void CreateChoiceButton(string text, int index)
